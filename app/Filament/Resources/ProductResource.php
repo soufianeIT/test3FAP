@@ -44,14 +44,14 @@ class ProductResource extends Resource
             //     ->placeholder('Select categories...')
             //     ->options(\App\Models\Category::all()->pluck('name', 'id')->toArray())
             //     ->saveToPivotTable('category_product')
-            //     ->relationshipTo('categories'),  
+            //     ->relationshipTo('categories'),
+            Forms\Components\Select::make('category_id')->relationship('categories', 'name'),
             Forms\Components\FileUpload::make('image')
                 ->label('Product Image')
                 ->image()
                 ->directory('product-images')
                 ->required(),
             ]);
-
     }
 
     public static function table(Table $table): Table

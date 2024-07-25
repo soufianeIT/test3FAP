@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Dashboard</div>
+                <div class="card-header bg-info text-white fw-bold">Mes commandes</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -21,10 +21,10 @@
                             </div>
                             <div class="card-body">
                                 <h6>Liste des produits</h6>
-                                @foreach (unserialize($order->products) as $product)
-                                    <div>Nom du produit: {{ $product[0] }}</div>
-                                    <div>Prix: {{ getFormattedPrice($product[1]) }}</div>
-                                    <div>Quantité: {{ $product[2] }}</div>
+                                @foreach (json_decode($order->products) as $product)
+                                    <div>Nom du produit: {{ $product->title }}</div>
+                                    <div>Prix: {{ getFormattedPrice($product->price) }}</div>
+                                    <div>Quantité: {{ $product->qty }}</div>
                                 @endforeach
                             </div>
                         </div>
