@@ -49,28 +49,7 @@ jobs:
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
       - name: Push Docker image
-        run: docker push ingrid265/3fap-app .
-
-  create_tag:
-    runs-on: ubuntu-latest
-    needs: build_and_push
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/execute@v0.9.7
-        with:
-          versionSpec: '5.x'
-
-      - name: Create tag
-        id: gitversion
-        run: |
-          GIT_TAG=$(gitversion /showvariable FullSemVer)
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git tag -a "$GIT_TAG" -m "Automatically generated tag from GitHub Actions"
-          git push origin "$GIT_TAG"
+        run: docker push ingrid265/3fap-app:latest
 
   deploy:
     runs-on: ubuntu-latest
