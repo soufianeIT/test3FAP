@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre Application</title>
     <!-- Inclure Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,20 +20,17 @@
                         @endif
                     </div>
                     @else
-                    <li class="nav-item dropdown">
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ Auth::user()->name }}
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                                <a class="dropdown-item" href="{{ route('home') }}">Mes commandes</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">{{ __('Logout') }}</button>
-                                </form>
-                            </div>
+                    <li class="nav-item">
+
+                        <div class="d-flex align-items-center">
+                            <span class="me-3">{{ Auth::user()->name }}</span>
+                            <a href="{{ route('home') }}" class="dropdown-item">commande</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-link">{{ __('Logout') }}</button>
+                            </form>
                         </div>
-                    </li>
+                    </li> 
                     @endguest
                 </ul>
             </div>
@@ -41,12 +38,11 @@
     </nav>
 
     <!-- Inclure Bootstrap JS et Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
     <script>
-        const dropdownBtn = document.getElementById('adminDropdown')
-        console.log(dropdownBtn)
+        const dropdownBtn = document.getElementById('adminDropdown');
+        console.log(dropdownBtn);
     </script>
 </body>
 </html>

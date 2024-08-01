@@ -13,6 +13,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Http\Request;
 use Stripe\Service\ProductService;
 
@@ -163,4 +166,5 @@ class PaymentController extends Controller
             $product->update(['stock' => $product->stock - $item->qty]);
         }
     }
+
 }

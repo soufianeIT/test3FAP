@@ -26,6 +26,11 @@
                                     <div>Prix: {{ getFormattedPrice($product->price) }}</div>
                                     <div>Quantité: {{ $product->qty }}</div>
                                 @endforeach
+                                @if (Auth()->user())
+                                    <a href="{{ route('order.downloadPdf', $order->id) }}" class="btn btn-primary mt-3">
+                                        Télécharger PDF
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     @empty

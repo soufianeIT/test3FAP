@@ -24,6 +24,21 @@
                     @include('profile.partials.delete-user-form')
                 </div>
             </div>
+
+            <div class="row mb-3">
+    <label for="is_professional" class="col-md-4 col-form-label text-md-end">{{ __('Professionnel') }}</label>
+
+    <div class="col-md-6">
+        <input id="is_professional" type="checkbox" class="form-check-input @error('is_professional') is-invalid @enderror" name="is_professional" value="1" {{ $user->is_professional ? 'checked' : '' }}>
+
+        @error('is_professional')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+</div>
+
         </div>
     </div>
 </x-app-layout>

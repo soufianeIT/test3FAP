@@ -15,21 +15,14 @@ class CartController extends Controller
         return view('cart.index');
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
-        // Vérifier si le produit existe
         $product = Product::find($request->id);
 
         if (!$product) {
             return redirect()->route('products.index')->with('error', 'Le produit spécifié n\'existe pas.');
         }
 
-        // Rechercher un produit duplicata dans le panier
         $duplicata = Cart::search(function ($cartItem, $rowId) use ($request) {
             return $cartItem->id == $request->id;
         });
@@ -38,48 +31,32 @@ class CartController extends Controller
             return redirect()->route('products.index')->with('success', 'Le produit a déjà été ajouté.');
         }
 
-        // Ajouter le produit au panier
         Cart::add($product->id, $product->title, 1, $product->price)
             ->associate('App\Models\Product');
 
         return redirect()->route('products.index')->with('success', 'Le produit a bien été ajouté.');
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
     public function update(Request $request, $rowId)
     {
-        //
         $data = $request->json()->all();
+        $stock = $request->input('stock');
 
-        // $validates = Validator::make($request->all(), [
-        //     'qty' => 'numeric|required|between:1,5',
-        // ]);
+        $validated = $request->validate([
+            'qty' => 'required|numeric|between:1,5',
+        ]);
 
-        // if ($validates->fails()) {
-        //     Session::flash('error', 'La quantité doit est comprise entre 1 et 5.');
-        //     return response()->json(['error' => 'Cart Quantity Has Not Been Updated']);
-        // }
-
-        if ($data['qty'] > $data['stock']) {
-            Session::flash('error', 'La quantité de ce produit n\'est pas disponible.');
-            return response()->json(['error' => 'Product Quantity Not Available']);
+        if ($data['qty'] > $stock) {
+            return response()->json(['error' => 'La quantité demandée dépasse le stock disponible.'], 400);
         }
 
         Cart::update($rowId, $data['qty']);
 
-        Session::flash('success', 'La quantité du produit est passée à ' . $data['qty'] . '.');
-        
-        return response()->json(['success' => 'Cart Quantity Has Been Updated']);
-
+        return response()->json([
+            'success' => 'La quantité du produit a été mise à jour.',
+            'subtotal' => Cart::subtotal(),
+            'total' => Cart::total(),
+        ]);
     }
 
     public function destroy($rowId)

@@ -49,7 +49,7 @@
                                         </th>
                                         <td class="border-0 align-middle"><strong>{{ getFormattedPrice($product->subtotal()) }}</strong></td>
                                         <td class="border-0 align-middle">
-                                            <select class="custom-select" name="qty" id="qty_{{ $product->rowId }}" data-stock="{{ $product->model->stock }}">
+                                            <select class="custom-select" name="qty" id="qty_{{ $product->rowId }}" data-row-id="{{ $product->model->stock }}">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     <option value="{{ $i }}" {{ $product->qty == $i ? 'selected' : ''}}>
                                                         {{ $i }}
@@ -106,16 +106,16 @@
 <script>
    document.addEventListener('DOMContentLoaded', function() {
     var selects = document.querySelectorAll('select[name="qty"]');
-    
+
     selects.forEach(function(select) {
         select.addEventListener('change', function() {
-            var rowId = this.dataset.id;
-            var stock = element.getAttribute('data-stock');
+            var rowId = this.dataset.rowId;
+            var stock = this.dataset.stock;
             var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             if (parseInt(this.value) > parseInt(stock)) {
                 alert('La quantité sélectionnée dépasse le stock disponible.');
-                this.value = stock;  // Reset to max available stock
+                this.value = stock;  // Réinitialiser à la quantité maximum disponible
                 return;
             }
 
@@ -123,25 +123,32 @@
             xhr.open('PATCH', '/bag/' + rowId);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.setRequestHeader('X-CSRF-TOKEN', token);
-            
+
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    location.reload();
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        // Mettre à jour les prix affichés
+                        document.querySelector(`td[data-row-id="${rowId}"] .subtotal`).textContent = response.subtotal;
+                        document.querySelector('.total').textContent = response.total;
+                    } else {
+                        console.error(response.error);
+                    }
                 } else {
                     console.error(xhr.statusText);
                 }
             };
-            
+
             xhr.onerror = function() {
                 console.error('Request failed');
             };
-            
+
             var data = JSON.stringify({ qty: this.value });
             xhr.send(data);
         });
     });
 });
+
 </script>
 @endsection
 

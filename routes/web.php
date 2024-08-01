@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use Faker\Provider\ar_EG\Payment;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -41,3 +42,5 @@ Route::group(['middleware' => ['auth']], function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('order/{orderId}/download', [OrderController::class, 'downloadPdf'])->name('order.downloadPdf');

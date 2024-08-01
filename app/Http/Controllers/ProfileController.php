@@ -28,6 +28,12 @@ class ProfileController extends Controller
     {
         $request->user()->fill($request->validated());
 
+        if ($request->has('is_professional')) {
+            $request->user()->is_professional = true;
+        } else {
+            $request->user()->is_professional = false;
+        }
+
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
