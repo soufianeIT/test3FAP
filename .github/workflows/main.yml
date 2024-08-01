@@ -40,8 +40,8 @@ jobs:
         run: echo "docker"
 
       - name: Build Docker image
-        run: docker build -t ingrid265/3fap-app:tagname .
-
+        run: docker build -t ingrid265/3fap-app .
+   
       - name: Login to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
